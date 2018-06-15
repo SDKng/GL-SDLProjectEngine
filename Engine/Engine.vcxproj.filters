@@ -63,6 +63,15 @@
     <ClInclude Include="MeshComponent.h">
       <Filter>Source\Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Clock.h">
+      <Filter>Source\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="InputSystem.h">
+      <Filter>Source\Systems</Filter>
+    </ClInclude>
+    <ClInclude Include="stbimage\Texture.h">
+      <Filter>Source\Resources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Engine.cpp">
@@ -97,6 +106,16 @@
     </ClCompile>
     <ClCompile Include="MeshComponent.cpp">
       <Filter>Source\Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Clock.cpp">
+      <Filter>Source\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="inputSystems.cpp">
+      <Filter>Source\Systems</Filter>
+    </ClCompile>
+    <ClCompile Include="stbimage\stb_image.cpp" />
+    <ClCompile Include="stbimage\Texture.cpp">
+      <Filter>Source\Resources</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -1,11 +1,21 @@
 #pragma once
 
+#include "../Engine/glm/glm.hpp"
+#include "../Engine/glm/gtc/matrix_transform.hpp"
+#include "../Engine/glm/gtc/type_ptr.hpp"
+
 #include <vector>
 
 namespace engine {
 
 	class GameObject {
 
+		glm::vec4 m_position;
+		glm::vec4 m_scale;
+		glm::vec4 m_rotation;
+
+		glm::mat4 m_transform;
+		
 		std::vector<GameObject*> m_children;
 		
 		// change this to ECS
@@ -41,8 +51,14 @@ namespace engine {
 			return nullptr;
 		}
 	
+
+
+
 		inline std::vector<class Component*> GetComponents() const { return m_components; }
-	
+		inline const glm::mat4& GetTransform() const { return m_transform; }
+
+		void Translate(float x, float y, float z);
 	};
+
 
 }

@@ -12,10 +12,11 @@ namespace engine {
 
 		class MeshData* m_meshdata;
 		class ShaderProgram* m_shaderprogram;
+		class Texture * m_texture;
 
 	public:
 
-		MeshComponent(class MeshData* md, class ShaderProgram* sp);
+		MeshComponent(class MeshData* md, class ShaderProgram* sp, class Texture* tex);
 		~MeshComponent();
 	
 		

@@ -25,5 +25,7 @@ namespace engine {
 		bool Shutdown() override;
 
 		void Use();
+
+		inline unsigned int GetID() const { return m_id; }
 	};
 }

@@ -145,11 +145,13 @@
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="Clock.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="EngineTypes.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Graphics.h" />
+    <ClInclude Include="InputSystem.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="MeshComponent.h" />
     <ClInclude Include="MeshData.h" />
@@ -157,20 +159,25 @@
     <ClInclude Include="ResourceManager.h" />
     <ClInclude Include="ShaderProgram.h" />
     <ClInclude Include="Singleton.h" />
+    <ClInclude Include="stbimage\Texture.h" />
     <ClInclude Include="System.h" />
     <ClInclude Include="SystemManager.h" />
     <ClInclude Include="Window.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Clock.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Graphics.cpp" />
+    <ClCompile Include="inputSystems.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="MeshComponent.cpp" />
     <ClCompile Include="Meshdata.cpp" />
     <ClCompile Include="ResourceManager.cpp" />
     <ClCompile Include="ShaderProgram.cpp" />
     <ClCompile Include="Singleton.cpp" />
+    <ClCompile Include="stbimage\stb_image.cpp" />
+    <ClCompile Include="stbimage\Texture.cpp" />
     <ClCompile Include="SystemManager.cpp" />
     <ClCompile Include="Window.cpp" />
   </ItemGroup>

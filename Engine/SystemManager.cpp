@@ -6,6 +6,7 @@ namespace engine {
 
 		m_systems.emplace_back(new Window);
 		m_systems.emplace_back(new Graphics);
+		m_systems.emplace_back(new InputSystem);
 		
 	}
 	

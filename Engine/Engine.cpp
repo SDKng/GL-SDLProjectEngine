@@ -10,6 +10,8 @@
 #include "GameObject.h"
 #include "MeshData.h"
 #include "MeshComponent.h"
+#include "stbimage\stb_image.h"
+#include "..\Engine\stbimage\Texture.h"
 
 #include <chrono>
 #include <Windows.h>
@@ -22,28 +24,36 @@ namespace engine {
 
 		"#version 330 core\n"
 		"layout (location = 0) in vec3 aPos; \n"
-		""
+		"layout (location = 1) in vec3 aColor; \n"
+		"layout (location = 2) in vec2 aTexCoord; \n"
+		"uniform mat4 transform; \n"
+		"out vec3 ourColor; \n"
+		"out vec2 TexCoord; \n"
 		"void main() \n"
 		"{ \n"
-		"	gl_Position = vec4(aPos.x, aPos.y, aPos.z, 1.0f); \n"
+		"	gl_Position = transform * vec4(aPos.x, aPos.y, aPos.z, 1.0f); \n"
+		"	ourColor = aColor; \n"
+		"	TexCoord = aTexCoord; \n"
 		"}\0";
 
 	const char* fragmentShaderSource =
-
 		"#version 330 core\n"
+		"in vec2 TexCoord; \n"
+		"in vec3 ourColor; \n"
 		"out vec4 FragColor; \n"
-		""
+		"uniform sampler2D texture1; \n"
 		"void main() {\n"
-		"	FragColor = vec4(1.0f, 0.5f, 0.0f, 1.0);"
+		"	FragColor = texture(texture1, TexCoord) * vec4(ourColor, 1.0); \n"
 		"}\0";
 
 
 	float vertices[] = {
 
-		0.5f, 0.5f, 0.0f,
-		0.0f, -0.5f, 0.0f,
-		-0.5f, -0.5f, 0.0f,
-		-0.5f, 0.5f, 0.0f
+		//pos					colours					uvs
+		0.5f, 0.5f, 0.0f,		1.0f, 0.0f, 0.0f,		1.0f, 1.0f,
+		0.5f, -0.5f, 0.0f,		0.0f, 0.5f, 0.0f,		1.0f, 0.0f,
+	   -0.5f, -0.5f, 0.0f,		0.4f, 0.0f, 0.6f,		0.0f, 1.0f,
+	   -0.5f, 0.5f, 0.0f,		0.0f, 0.2f, 0.2f,		1.0f, 1.0f
 	};
 
 	unsigned indices[] = {
@@ -52,14 +62,27 @@ namespace engine {
 		1, 2, 3
 	};
 
+	//float texCoords[] = {
+
+	//	0.0f, 0.0f, //lower left
+	//	1.0f, 1.0f, //lower right
+	//	0.0f, 1.0f, //top left
+	//	1.0f, 1.0f  //top right
+	//};
+
 	MeshData md (std::vector<float>(vertices, vertices + sizeof (vertices) / sizeof (vertices[0])),
 		std::vector<int>(indices, indices + sizeof(indices) / sizeof(indices[0])));
 
 	ShaderProgram sp(vertexShaderSource, fragmentShaderSource);
 
-	MeshComponent mc(&md, &sp);
+	Texture tex("trump.jpg");
+
+	MeshComponent mc(&md, &sp, &tex);
 
 	GameObject go;
+
+	int width, height, nrChannels;
+	unsigned char* data = stbi_load("trump.jpg", &width, &height, &nrChannels, 0);
 
 	Engine::~Engine() {
 
@@ -74,8 +97,9 @@ namespace engine {
 		
 			md.Init();
 			sp.Init();
-
+			
 			mc.Init();
+			tex.Init();
 
 			go.AddConponent(&mc);
 		
@@ -86,14 +110,11 @@ namespace engine {
 	
 	//main loop
 	void Engine::Run() {
-
-		bool quit = false;
-		SDL_Event e;
 		
 		LARGE_INTEGER t;
 		QueryPerformanceFrequency(&t);
 
-		while (!quit) {
+		while (!SystemManager::GetInstance().GetSystem<InputSystem>()->WasCloseRequested()) {
 
 			
 			//FPS COUNTER
@@ -121,35 +142,36 @@ namespace engine {
 			}
 			//FPS COUNTER END
 
-			while (SDL_PollEvent(&e) != 0) {
-
-				switch (e.type) {
-
-				case SDL_QUIT: 
-					quit = true;
-					break;
-				
-				default:
-					break;
-
-				}
-			}
+			
 			SystemManager::GetInstance().Update();
 			go.Update();
 			
 			SystemManager::GetInstance().Draw();
 			go.Draw();
 
+			InputSystem* input = SystemManager::GetInstance().GetSystem<InputSystem>();
+		
+			if (input->WasKeyPressed(SDLK_SPACE)) {
 
-			// remove this
-			//glEnableClientState(GL_COLOR_ARRAY);
-			//glBegin(GL_QUADS);
-			//glColor3f(1.0f, 0.0f, 1.0f);
-			//glVertex2f(0, 0);
-			//glVertex2f(0, 1);
-			//glVertex2f(1, 1);
-			//glVertex2f(1, 0);
-			//glEnd();
+				std::cout << "Pressing Space" << std::endl;
+			}
+			
+			if (input->IsKey(SDLK_w)) {
+
+				go.Translate(0.0f, 0.0005f, 0.0f);
+			}
+			if (input->IsKey(SDLK_s)) {
+
+				go.Translate(0.0f, -0.0005f, 0.0f);
+			}
+			if (input->IsKey(SDLK_a)) {
+
+				go.Translate(-0.0005f, 0.0f, 0.0f);
+			}
+			if (input->IsKey(SDLK_d)) {
+
+				go.Translate(0.0005f, 0.0f, 0.0f);
+			}
 		}
 	}
 }	
